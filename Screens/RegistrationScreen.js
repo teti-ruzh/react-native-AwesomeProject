@@ -4,15 +4,49 @@ import {
   ImageBackground,
   Text,
   TextInput,
+  Button,
   TouchableOpacity,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
 } from "react-native";
+import React, { useState } from "react";
 import { styles } from "../styles/registration.styles";
 
+const initialState = {
+  userName: "",
+  email: "",
+  password: "",
+};
+
 export const RegistrationScreen = () => {
+  const [state, setState] = useState(initialState);
+  const [isShowPassword, setIsShowPassword] = useState(true);
+
+  const onRegister = () => {
+    if (!state.email || !state.password || !state.userName) {
+      Alert.alert("All fields must be filled");
+      return;
+    }
+
+    if (!state.email.includes("@")) {
+      Alert.alert("Enter a valid email address (Example: abc@xxx.yyy)");
+      return;
+    }
+
+    if (state.password.length < 8) {
+      Alert.alert("Your password must have at least 8 characters");
+      return;
+    }
+    console.log(state);
+    setState(initialState);
+  };
+
+  const handlePasswordVisibility = () => {
+    setIsShowPassword(!isShowPassword);
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -34,20 +68,47 @@ export const RegistrationScreen = () => {
               </View>
               <Text style={styles.registerTitle}>Registration</Text>
               <View style={styles.inputsContainer}>
-                <TextInput style={styles.input} placeholder="Login"></TextInput>
-                <TextInput style={styles.input} placeholder="Email"></TextInput>
+                <TextInput
+                  style={styles.input}
+                  value={state.userName}
+                  onChangeText={(text) =>
+                    setState({ ...state, userName: text.trim() })
+                  }
+                  placeholder="Login"
+                ></TextInput>
+                <TextInput
+                  style={styles.input}
+                  value={state.email}
+                  onChangeText={(text) =>
+                    setState({ ...state, email: text.trim() })
+                  }
+                  placeholder="Email"
+                  keyboardType="email-address"
+                ></TextInput>
                 <View style={styles.passwordContainer}>
                   <TextInput
                     style={styles.inputLast}
-                    secureTextEntry={true}
-                    placeholder="Password"
+                    value={state.password}
+                    onChangeText={(text) =>
+                      setState({ ...state, password: text.trim() })
+                    }
+                    secureTextEntry={!isShowPassword}
+                    placeholder="Password (at least 8 characters)"
+                    minLength={8}
+                    maxLength={16}
                   ></TextInput>
-                  <TouchableOpacity style={styles.showPasswordContainer}>
-                    <Text style={styles.showPasswordText}>Show</Text>
+                  <TouchableOpacity
+                    style={styles.showPasswordContainer}
+                    onPress={handlePasswordVisibility}
+                  >
+                    <Text style={styles.showPasswordText}>
+                      {" "}
+                      {!isShowPassword ? "Show" : "Hide"}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
-              <TouchableOpacity title="Sign up" style={styles.signUpBtn}>
+              <TouchableOpacity onPress={onRegister} style={styles.signUpBtn}>
                 <Text style={styles.btnLabel}>Sign Up</Text>
               </TouchableOpacity>
               <View>
