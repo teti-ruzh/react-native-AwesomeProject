@@ -11,11 +11,11 @@ import {
   Alert,
 } from "react-native";
 import React, { useState } from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { styles } from "../styles/login.styles";
 
 const initialState = {
-  userName: "",
+  user: "",
   email: "",
   password: "",
 };
@@ -27,24 +27,14 @@ export const LoginScreen = () => {
 
   const onLogin = () => {
     if (!state.email || !state.password) {
-      Alert.alert("All fields must be filled");
+      Alert.alert("Please enter all data");
       return;
     }
-
-    if (!state.email.includes("@")) {
-      Alert.alert("Enter a valid email address (Example: abc@xxx.yyy)");
-      return;
-    }
-
-    if (state.password.length < 8) {
-      Alert.alert("Your password must have at least 8 characters");
-      return;
-    }
-    console.log(state);
+    // console.log(state);
     setState(initialState);
     navigation.navigate("Home", {
-      userName: state.userName,
-      email: state.email,
+      screen: "Posts",
+      params: { user: state.user, email: state.email },
     });
   };
 
@@ -83,7 +73,7 @@ export const LoginScreen = () => {
                     }
                     value={state.password}
                     style={styles.inputLast}
-                    placeholder="Password  (at least 8 characters)"
+                    placeholder="Password"
                     textContentType="password"
                     secureTextEntry={!isShowPassword}
                   ></TextInput>

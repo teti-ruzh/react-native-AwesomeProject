@@ -4,7 +4,6 @@ import {
   ImageBackground,
   Text,
   TextInput,
-  Button,
   TouchableOpacity,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
@@ -12,40 +11,31 @@ import {
   Platform,
 } from "react-native";
 import React, { useState } from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { styles } from "../styles/registration.styles";
 
 const initialState = {
-  userName: "",
+  user: "",
   email: "",
   password: "",
 };
 
 export const RegistrationScreen = () => {
+  const navigation = useNavigation();
   const [state, setState] = useState(initialState);
   const [isShowPassword, setIsShowPassword] = useState(true);
-  const navigation = useNavigation();
 
   const onRegister = () => {
     if (!state.email || !state.password || !state.userName) {
-      Alert.alert("All fields must be filled");
+      Alert.alert("Please enter all data");
       return;
     }
 
-    if (!state.email.includes("@")) {
-      Alert.alert("Enter a valid email address (Example: abc@xxx.yyy)");
-      return;
-    }
-
-    if (state.password.length < 8) {
-      Alert.alert("Your password must have at least 8 characters");
-      return;
-    }
-    console.log(state);
+    // console.log(state);
     setState(initialState);
     navigation.navigate("Home", {
-      userName: state.userName,
-      email: state.email,
+      screen: "Posts",
+      params: { user: state.user, email: state.email },
     });
   };
 
@@ -99,9 +89,7 @@ export const RegistrationScreen = () => {
                       setState({ ...state, password: text.trim() })
                     }
                     secureTextEntry={!isShowPassword}
-                    placeholder="Password (at least 8 characters)"
-                    minLength={8}
-                    maxLength={16}
+                    placeholder="Password"
                   ></TextInput>
                   <TouchableOpacity
                     style={styles.showPasswordContainer}
