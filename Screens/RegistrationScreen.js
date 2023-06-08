@@ -12,6 +12,7 @@ import {
   Platform,
 } from "react-native";
 import React, { useState } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { styles } from "../styles/registration.styles";
 
 const initialState = {
@@ -23,6 +24,7 @@ const initialState = {
 export const RegistrationScreen = () => {
   const [state, setState] = useState(initialState);
   const [isShowPassword, setIsShowPassword] = useState(true);
+  const navigation = useNavigation();
 
   const onRegister = () => {
     if (!state.email || !state.password || !state.userName) {
@@ -41,6 +43,10 @@ export const RegistrationScreen = () => {
     }
     console.log(state);
     setState(initialState);
+    navigation.navigate("Home", {
+      userName: state.userName,
+      email: state.email,
+    });
   };
 
   const handlePasswordVisibility = () => {
@@ -112,7 +118,14 @@ export const RegistrationScreen = () => {
                 <Text style={styles.btnLabel}>Sign Up</Text>
               </TouchableOpacity>
               <View>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Login", {
+                      name: state.userName,
+                      email: state.email,
+                    })
+                  }
+                >
                   <Text style={styles.textLogIn}>
                     Already have account? Log In
                   </Text>

@@ -11,14 +11,17 @@ import {
   Alert,
 } from "react-native";
 import React, { useState } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { styles } from "../styles/login.styles";
 
 const initialState = {
+  userName: "",
   email: "",
   password: "",
 };
 
 export const LoginScreen = () => {
+  const navigation = useNavigation();
   const [state, setState] = useState(initialState);
   const [isShowPassword, setIsShowPassword] = useState(true);
 
@@ -39,6 +42,10 @@ export const LoginScreen = () => {
     }
     console.log(state);
     setState(initialState);
+    navigation.navigate("Home", {
+      userName: state.userName,
+      email: state.email,
+    });
   };
 
   const handlePasswordVisibility = () => {
@@ -95,7 +102,10 @@ export const LoginScreen = () => {
                 <Text style={styles.btnLabel}>Log In</Text>
               </TouchableOpacity>
               <View>
-                <TouchableOpacity style={styles.textLogInContainer}>
+                <TouchableOpacity
+                  style={styles.textLogInContainer}
+                  onPress={() => navigation.navigate("Registration")}
+                >
                   <Text style={styles.textRegisterQuestion}>
                     Don't have an account?{" "}
                     <Text style={styles.textRegister}>Register</Text>
