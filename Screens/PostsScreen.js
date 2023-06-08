@@ -12,7 +12,7 @@ export const PostsScreen = () => {
       <View style={styles.userContainer}>
         <View style={styles.photo}></View>
         <View>
-          {user && <Text style={styles.name}>{user}</Text>}
+          <Text style={styles.name}>{user}</Text>
           <Text style={styles.email}>{email}</Text>
         </View>
       </View>

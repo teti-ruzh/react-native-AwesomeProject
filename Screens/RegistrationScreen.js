@@ -26,7 +26,7 @@ export const RegistrationScreen = () => {
   const [isShowPassword, setIsShowPassword] = useState(true);
 
   const onRegister = () => {
-    if (!state.email || !state.password || !state.userName) {
+    if (!state.email || !state.password || !state.user) {
       Alert.alert("Please enter all data");
       return;
     }
@@ -66,9 +66,9 @@ export const RegistrationScreen = () => {
               <View style={styles.inputsContainer}>
                 <TextInput
                   style={styles.input}
-                  value={state.userName}
+                  value={state.user}
                   onChangeText={(text) =>
-                    setState({ ...state, userName: text.trim() })
+                    setState({ ...state, user: text.trim() })
                   }
                   placeholder="Login"
                 ></TextInput>
