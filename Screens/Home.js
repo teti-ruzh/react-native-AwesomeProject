@@ -53,7 +53,7 @@ export const Home = () => {
             </View>
           ),
           headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => navigation.navigate("Posts")}>
               <Image
                 source={require("../assets/images/arrowleft.png")}
                 style={{
@@ -65,6 +65,9 @@ export const Home = () => {
               ></Image>
             </TouchableOpacity>
           ),
+          tabBarStyle: {
+            display: "none",
+          },
         }}
       />
       <Tabs.Screen
@@ -78,7 +81,7 @@ export const Home = () => {
             ></Image>
           ),
           headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => navigation.navigate("Posts")}>
               <Image
                 source={require("../assets/images/arrowleft.png")}
                 style={{

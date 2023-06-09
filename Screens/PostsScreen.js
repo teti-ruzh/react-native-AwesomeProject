@@ -3,17 +3,17 @@ import { useRoute } from "@react-navigation/native";
 import { styles } from "../styles/posts.style";
 
 export const PostsScreen = () => {
-  const {
-    params: { user, email },
-  } = useRoute();
+  // const {
+  //   params: { user, email },
+  // } = useRoute();
 
   return (
     <View style={styles.container}>
       <View style={styles.userContainer}>
         <View style={styles.photo}></View>
         <View>
-          <Text style={styles.name}>{user}</Text>
-          <Text style={styles.email}>{email}</Text>
+          <Text style={styles.name}>User</Text>
+          <Text style={styles.email}>Email</Text>
         </View>
       </View>
       <View style={styles.postsContainer}>
