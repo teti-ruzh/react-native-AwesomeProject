@@ -5,6 +5,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { PostsScreen } from "./PostsScreen";
 import { ProfileScreen } from "./ProfileScreen";
 import { CreatePostsScreen } from "./CreatePostsScreen";
+import { CommentsScreen } from "./CommentsScreen";
+import { MapScreen } from "./MapScreen";
 
 import { styles } from "../styles/home.styles";
 
@@ -82,6 +84,62 @@ export const Home = () => {
           ),
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.navigate("Posts")}>
+              <Image
+                source={require("../assets/images/arrowleft.png")}
+                style={{
+                  width: 24,
+                  height: 24,
+                  marginRight: 16,
+                  marginLeft: 16,
+                }}
+              ></Image>
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Comments"
+        component={CommentsScreen}
+        options={{
+          tabBarButton: () => null,
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("Posts", {
+                  url: "",
+                  descr: "",
+                  locationText: "",
+                })
+              }
+            >
+              <Image
+                source={require("../assets/images/arrowleft.png")}
+                style={{
+                  width: 24,
+                  height: 24,
+                  marginRight: 16,
+                  marginLeft: 16,
+                }}
+              ></Image>
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Map"
+        component={MapScreen}
+        options={{
+          tabBarButton: () => null,
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("Posts", {
+                  url: "",
+                  descr: "",
+                  locationText: "",
+                })
+              }
+            >
               <Image
                 source={require("../assets/images/arrowleft.png")}
                 style={{

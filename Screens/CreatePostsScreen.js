@@ -1,19 +1,22 @@
 import { View, Text, Image, TextInput, TouchableOpacity } from "react-native";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
+import * as Location from "expo-location";
+
 import { styles } from "../styles/createpost.style";
 
 export const CreatePostsScreen = () => {
   const navigation = useNavigation();
 
-  const [postDescr, setPostDescr] = useState(null);
-  const [location, setLocation] = useState(null);
+  const [postDescr, setPostDescr] = useState("");
+  const [locationText, setLocationText] = useState("");
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
-  const [imgurl, setImgurl] = useState(null);
+  const [imgurl, setImgurl] = useState("");
+  const [location, setLocation] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -21,6 +24,20 @@ export const CreatePostsScreen = () => {
       await MediaLibrary.requestPermissionsAsync();
 
       setHasPermission(status === "granted");
+    })();
+
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      const coords = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      };
+      setLocation(coords);
     })();
   }, []);
 
@@ -32,10 +49,12 @@ export const CreatePostsScreen = () => {
   }
 
   const resetPost = () => {
-    setImgurl(null);
-    setPostDescr(null);
+    setImgurl("");
+    setPostDescr("");
+    setLocationText("");
     setLocation(null);
   };
+  // console.log(location);
 
   return (
     <View style={styles.container}>
@@ -103,8 +122,8 @@ export const CreatePostsScreen = () => {
 
         <View style={styles.locationThumb}>
           <TextInput
-            onChangeText={(text) => setLocation(text)}
-            value={location}
+            onChangeText={(text) => setLocationText(text)}
+            value={locationText}
             style={styles.locationIinput}
             placeholder="Location"
           ></TextInput>
@@ -120,7 +139,8 @@ export const CreatePostsScreen = () => {
             navigation.navigate("Posts", {
               url: imgurl,
               descr: postDescr,
-              location: location,
+              locationText: locationText,
+              location,
             });
             resetPost();
           }}

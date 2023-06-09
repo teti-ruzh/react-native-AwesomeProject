@@ -26,10 +26,10 @@ export const LoginScreen = () => {
   const [isShowPassword, setIsShowPassword] = useState(true);
 
   const onLogin = () => {
-    // if (!state.email || !state.password) {
-    //   Alert.alert("Please enter all data");
-    //   return;
-    // }
+    if (!state.email || !state.password) {
+      Alert.alert("Please enter all data");
+      return;
+    }
     // console.log(state);
     setState(initialState);
     navigation.navigate("Home", {
