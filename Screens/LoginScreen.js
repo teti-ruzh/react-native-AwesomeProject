@@ -12,16 +12,18 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/auth/authOperations";
 import { styles } from "../styles/login.styles";
 
 const initialState = {
-  user: "",
   email: "",
   password: "",
 };
 
 export const LoginScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [state, setState] = useState(initialState);
   const [isShowPassword, setIsShowPassword] = useState(true);
 
@@ -30,12 +32,15 @@ export const LoginScreen = () => {
       Alert.alert("Please enter all data");
       return;
     }
+    dispatch(login(state));
     // console.log(state);
+
     setState(initialState);
-    navigation.navigate("Home", {
-      screen: "Posts",
-      params: { user: state.user, email: state.email },
-    });
+    // navigation.navigate("Home", {
+    //   screen: "Posts",
+    //   params: { user: state.user, email: state.email },
+    // });
+    // navigation.navigate("Posts");
   };
 
   const handlePasswordVisibility = () => {

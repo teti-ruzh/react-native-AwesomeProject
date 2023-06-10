@@ -1,9 +1,14 @@
 import { View, Text, Image, TextInput, TouchableOpacity } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { collection, addDoc } from "firebase/firestore";
+import { db, storage } from "../config";
+import { selectName, selectUserId } from "../redux/auth/authSelectors";
+import { useSelector } from "react-redux";
 
 import { styles } from "../styles/createpost.style";
 
@@ -15,8 +20,11 @@ export const CreatePostsScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
-  const [imgurl, setImgurl] = useState("");
+  const [imgurl, setImgurl] = useState(null);
   const [location, setLocation] = useState(null);
+
+  const userId = useSelector(selectUserId);
+  const userName = useSelector(selectName);
 
   useEffect(() => {
     (async () => {
@@ -32,12 +40,12 @@ export const CreatePostsScreen = () => {
         console.log("Permission to access location was denied");
       }
 
-      let location = await Location.getCurrentPositionAsync({});
-      const coords = {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      };
-      setLocation(coords);
+      // let location = await Location.getCurrentPositionAsync({});
+      // const coords = {
+      //   latitude: location.coords.latitude,
+      //   longitude: location.coords.longitude,
+      // };
+      // setLocation(coords);
     })();
   }, []);
 
@@ -47,6 +55,56 @@ export const CreatePostsScreen = () => {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+
+  const takePhoto = async () => {
+    const photo = await cameraRef.takePictureAsync();
+    const location = await Location.getCurrentPositionAsync({});
+    const coords = {
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    };
+    setImgurl(photo.uri);
+    setLocation(coords);
+    await MediaLibrary.createAssetAsync(photo.uri);
+    // console.log(imgurl);
+  };
+
+  const uploadPostToServer = async () => {
+    try {
+      const photoUrl = await uploadPhotoToServer();
+      const uploadedInfo = {
+        displayName: userName,
+        photo: photoUrl,
+        name: postDescr,
+        location: locationText,
+        coordinate: location,
+        userId,
+        likes: [],
+        comments: 0,
+      };
+      await addDoc(collection(db, "posts"), uploadedInfo);
+      resetPost();
+      navigation.navigate("Posts");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const uploadPhotoToServer = async () => {
+    try {
+      const response = await fetch(imgurl);
+      const file = await response.blob();
+      const uniquePostId = Date.now().toString();
+      const linkToFile = ref(storage, `imgPost/${uniquePostId}`);
+      await uploadBytes(linkToFile, file);
+      const photoUrl = await getDownloadURL(
+        ref(storage, `imgPost/${uniquePostId}`)
+      );
+      return photoUrl;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const resetPost = () => {
     setImgurl("");
@@ -68,16 +126,7 @@ export const CreatePostsScreen = () => {
           ) : (
             <Camera style={styles.camera} type={type} ref={setCameraRef}>
               <View style={styles.photoView}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={async () => {
-                    if (cameraRef) {
-                      const { uri } = await cameraRef.takePictureAsync();
-                      await MediaLibrary.createAssetAsync(uri);
-                      setImgurl(uri);
-                    }
-                  }}
-                >
+                <TouchableOpacity style={styles.button} onPress={takePhoto}>
                   <View style={styles.takePhotoOut}>
                     <Image
                       source={require("../assets/images/camera.png")}
@@ -135,15 +184,7 @@ export const CreatePostsScreen = () => {
       {imgurl ? (
         <TouchableOpacity
           style={styles.postBtnActive}
-          onPress={() => {
-            navigation.navigate("Posts", {
-              url: imgurl,
-              descr: postDescr,
-              locationText: locationText,
-              location,
-            });
-            resetPost();
-          }}
+          onPress={uploadPostToServer}
         >
           <Text style={styles.btnLabelActive}>Post</Text>
         </TouchableOpacity>

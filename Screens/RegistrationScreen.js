@@ -9,34 +9,40 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { register } from "../redux/auth/authOperations";
 import { styles } from "../styles/registration.styles";
 
 const initialState = {
-  user: "",
+  login: "",
   email: "",
   password: "",
 };
 
 export const RegistrationScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [state, setState] = useState(initialState);
   const [isShowPassword, setIsShowPassword] = useState(true);
 
   const onRegister = () => {
-    if (!state.email || !state.password || !state.user) {
+    if (!state.email || !state.password || !state.login) {
       Alert.alert("Please enter all data");
       return;
     }
-
+    console.log(state);
+    dispatch(register(state));
     // console.log(state);
     setState(initialState);
-    navigation.navigate("Home", {
-      screen: "Posts",
-      params: { user: state.user, email: state.email },
-    });
+    // navigation.navigate("Home", {
+    //   screen: "Posts",
+    //   params: { user: state.user, email: state.email },
+    // });
+    // navigation.navigate("Posts");
   };
 
   const handlePasswordVisibility = () => {
@@ -66,9 +72,9 @@ export const RegistrationScreen = () => {
               <View style={styles.inputsContainer}>
                 <TextInput
                   style={styles.input}
-                  value={state.user}
+                  value={state.login}
                   onChangeText={(text) =>
-                    setState({ ...state, user: text.trim() })
+                    setState({ ...state, login: text.trim() })
                   }
                   placeholder="Login"
                 ></TextInput>
@@ -107,12 +113,13 @@ export const RegistrationScreen = () => {
               </TouchableOpacity>
               <View>
                 <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Login", {
-                      name: state.userName,
-                      email: state.email,
-                    })
-                  }
+                  // onPress={() =>
+                  //   navigation.navigate("Login", {
+                  //     name: state.userName,
+                  //     email: state.email,
+                  //   })
+                  // }
+                  onPress={() => navigation.navigate("Login")}
                 >
                   <Text style={styles.textLogIn}>
                     Already have account? Log In
