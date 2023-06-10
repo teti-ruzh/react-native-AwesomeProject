@@ -1,5 +1,5 @@
 import { View, Text, Image, TextInput, TouchableOpacity } from "react-native";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
@@ -39,13 +39,6 @@ export const CreatePostsScreen = () => {
       if (status !== "granted") {
         console.log("Permission to access location was denied");
       }
-
-      // let location = await Location.getCurrentPositionAsync({});
-      // const coords = {
-      //   latitude: location.coords.latitude,
-      //   longitude: location.coords.longitude,
-      // };
-      // setLocation(coords);
     })();
   }, []);
 
@@ -58,15 +51,14 @@ export const CreatePostsScreen = () => {
 
   const takePhoto = async () => {
     const photo = await cameraRef.takePictureAsync();
+    await MediaLibrary.createAssetAsync(photo.uri);
+    setImgurl(photo.uri);
     const location = await Location.getCurrentPositionAsync({});
     const coords = {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
     };
-    setImgurl(photo.uri);
     setLocation(coords);
-    await MediaLibrary.createAssetAsync(photo.uri);
-    // console.log(imgurl);
   };
 
   const uploadPostToServer = async () => {
@@ -112,7 +104,8 @@ export const CreatePostsScreen = () => {
     setLocationText("");
     setLocation(null);
   };
-  // console.log(location);
+
+  // console.log(imgurl);
 
   return (
     <View style={styles.container}>
@@ -154,11 +147,10 @@ export const CreatePostsScreen = () => {
             </Camera>
           )}
         </View>
-        {imgurl ? (
-          <Text style={styles.info}>Edit photo</Text>
-        ) : (
-          <Text style={styles.info}>Upload photo</Text>
-        )}
+
+        <Text style={styles.info} onPress={uploadPhotoToServer}>
+          Upload photo
+        </Text>
       </View>
 
       <View style={styles.addInfoContainer}>

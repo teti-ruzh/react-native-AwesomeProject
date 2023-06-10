@@ -38,10 +38,6 @@ export const RegistrationScreen = () => {
     dispatch(register(state));
     // console.log(state);
     setState(initialState);
-    // navigation.navigate("Home", {
-    //   screen: "Posts",
-    //   params: { user: state.user, email: state.email },
-    // });
     // navigation.navigate("Posts");
   };
 
@@ -112,15 +108,7 @@ export const RegistrationScreen = () => {
                 <Text style={styles.btnLabel}>Sign Up</Text>
               </TouchableOpacity>
               <View>
-                <TouchableOpacity
-                  // onPress={() =>
-                  //   navigation.navigate("Login", {
-                  //     name: state.userName,
-                  //     email: state.email,
-                  //   })
-                  // }
-                  onPress={() => navigation.navigate("Login")}
-                >
+                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
                   <Text style={styles.textLogIn}>
                     Already have account? Log In
                   </Text>

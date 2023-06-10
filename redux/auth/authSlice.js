@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { register, login, logout, refresh } from "./authOperations";
+import { register, login, logout } from "./authOperations";
 
 const initialState = {
   userId: "",
@@ -65,16 +65,13 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(logout.fulfilled, onLogoutFulfilled)
-      .addCase(refresh.pending, onPendingRefreshing)
-      .addCase(refresh.fulfilled, onUserFulfilledRefreshing)
-      .addCase(refresh.rejected, onRejectedRefreshing)
       .addCase(register.pending, onPending)
-      .addCase(login.pending, onPending)
       .addCase(register.fulfilled, onFulfilled)
-      .addCase(login.fulfilled, onFulfilled)
       .addCase(register.rejected, onRejected)
-      .addCase(login.rejected, onRejected);
+      .addCase(login.pending, onPending)
+      .addCase(login.fulfilled, onFulfilled)
+      .addCase(login.rejected, onRejected)
+      .addCase(logout.fulfilled, onLogoutFulfilled);
   },
 });
 export const { removeError } = authSlice.actions;

@@ -1,17 +1,7 @@
 import { View, Text, Image, TouchableOpacity, FlatList } from "react-native";
-import {
-  useRoute,
-  useNavigation,
-  NavigationContainer,
-} from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
-import {
-  collection,
-  query,
-  where,
-  onSnapshot,
-  updateProfile,
-} from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../config";
 import {
   selectName,
@@ -36,10 +26,6 @@ export const PostsScreen = () => {
 
   // const {
   //   params: { user = "", email = "", url = "", descr = "", location = "" },
-  // } = useRoute();
-
-  // const {
-  //   params: { url = "", descr = "", locationText = "", location },
   // } = useRoute();
 
   // useEffect(() => {
@@ -68,11 +54,6 @@ export const PostsScreen = () => {
       setPostsArr(postsArray);
     });
   }, []);
-
-  // const renderPostItem = ({ item, index }) => {
-  //   const isLastItem = index === posts.length - 1;
-  //   return <Post post={item} navigation={navigation} isLastItem={isLastItem} />;
-  // };
 
   return (
     <View style={styles.container}>
@@ -128,49 +109,6 @@ export const PostsScreen = () => {
           </View>
         )}
       />
-      {/* <View style={styles.postsContainer}>
-        {postsArr &&
-          postsArr.map(({ postDescr, photo, postsLocation }, index) => (
-            <View style={styles.postThumb} key={index}>
-              <View style={styles.postImg}>
-                <Image
-                  source={{ uri: `${photo}` }}
-                  style={{ width: "100%", height: "100%" }}
-                ></Image>
-              </View>
-              <Text style={styles.postDescr}>{postDescr}</Text>
-              <View style={styles.addInfoContainer}>
-                <View style={styles.comments}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate("Comments");
-                    }}
-                  >
-                    <Image
-                      source={require("../assets/images/comments.png")}
-                      style={styles.icon}
-                    ></Image>
-                  </TouchableOpacity>
-
-                  <Text style={styles.commentsInfo}>0</Text>
-                </View>
-                <View style={styles.location}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate("Map", { location });
-                    }}
-                  >
-                    <Image
-                      source={require("../assets/images/location.png")}
-                      style={styles.icon}
-                    ></Image>
-                  </TouchableOpacity>
-                  <Text style={styles.locationInfo}>{postsLocation}</Text>
-                </View>
-              </View>
-            </View>
-          ))}
-      </View> */}
     </View>
   );
 };

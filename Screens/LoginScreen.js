@@ -36,10 +36,6 @@ export const LoginScreen = () => {
     // console.log(state);
 
     setState(initialState);
-    // navigation.navigate("Home", {
-    //   screen: "Posts",
-    //   params: { user: state.user, email: state.email },
-    // });
     // navigation.navigate("Posts");
   };
 

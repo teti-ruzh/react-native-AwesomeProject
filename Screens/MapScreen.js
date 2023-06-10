@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { useRoute } from "@react-navigation/native";
 import { styles } from "../styles/map.style";
@@ -22,8 +22,6 @@ export const MapScreen = () => {
         }}
         mapType="standard"
         minZoomLevel={15}
-        // onMapReady={() => console.log("Map is ready")}
-        // onRegionChange={() => console.log("Region change")}
       >
         {location && (
           <Marker title="I am here" coordinate={location} description="Hello" />

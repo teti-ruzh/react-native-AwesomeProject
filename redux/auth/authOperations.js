@@ -3,7 +3,6 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged,
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../../config";
@@ -56,41 +55,3 @@ export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
     return thunkAPI.rejectWithValue(error.message);
   }
 });
-
-export const refresh = createAsyncThunk(
-  "auth/refresh",
-  async (_, { dispatch }) => {
-    try {
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
-        if (user) {
-          console.log("User is logged in:", user.uid);
-          dispatch(
-            setUser({
-              userId: user.uid,
-              name: user.displayName,
-              email: user.email,
-              photo: user.photoURL,
-              isLoggedIn: true,
-            })
-          );
-        } else {
-          console.log("User has logged our or have not logged in yet");
-          dispatch(
-            setUser({
-              userId: "",
-              name: "",
-              email: "",
-              photo: "",
-              isLoggedIn: false,
-            })
-          );
-        }
-      });
-      return () => {
-        unsubscribe();
-      };
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
