@@ -8,7 +8,6 @@ const initialState = {
   photo: "",
   isLogIn: false,
   isLoading: false,
-  isRefresh: false,
   error: "",
 };
 
@@ -36,23 +35,6 @@ const onLogoutFulfilled = (state) => {
   state.photo = "";
   state.isLogIn = false;
   state.isLoading = false;
-};
-
-const onUserFulfilledRefreshing = (state, { payload }) => {
-  const { userId, name, email, photo, isLogIn } = payload;
-  state.userId = userId;
-  state.name = name;
-  state.email = email;
-  state.photo = photo;
-  state.isLogIn = isLogIn;
-  state.error = "";
-  state.isRefresh = false;
-};
-const onRejectedRefreshing = (state) => {
-  state.isRefresh = false;
-};
-const onPendingRefreshing = (state) => {
-  state.isRefresh = true;
 };
 
 const authSlice = createSlice({

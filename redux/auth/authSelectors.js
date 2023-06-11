@@ -5,4 +5,3 @@ export const selectPhoto = (state) => state.auth.photo;
 export const selectIsLogIn = (state) => state.auth.isLogIn;
 export const selectIsLoading = (state) => state.auth.isLoading;
 export const selectError = (state) => state.auth.error;
-export const selectRefresh = (state) => state.auth.isRefresh;

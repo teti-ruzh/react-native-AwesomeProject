@@ -1,4 +1,4 @@
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import {
   persistReducer,
   persistStore,
@@ -17,11 +17,7 @@ const persistConfig = {
   storage: AsyncStorage,
 };
 
-const rootReducer = combineReducers({
-  auth: authReducer,
-});
-
-const reducer = persistReducer(persistConfig, rootReducer);
+const reducer = persistReducer(persistConfig, authReducer);
 
 export const store = configureStore({
   reducer,
